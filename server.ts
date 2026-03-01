@@ -10,7 +10,7 @@ async function startServer() {
   app.use(express.json());
 
   // API routes FIRST
-  app.post("/api/inquiry", async (req, res) => {
+  app.post("/api/submit-form", async (req, res) => {
     try {
       const { name, email, interest, message } = req.body;
 
@@ -53,6 +53,11 @@ async function startServer() {
   } else {
     // Serve static files in production
     app.use(express.static("dist"));
+    
+    // SPA fallback
+    app.get("*", (req, res) => {
+      res.sendFile(process.cwd() + "/dist/index.html");
+    });
   }
 
   app.listen(PORT, "0.0.0.0", () => {

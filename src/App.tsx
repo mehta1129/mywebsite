@@ -26,11 +26,11 @@ const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "
   
   if (isFooter) {
     return (
-      <div className="bg-white rounded-xl flex items-center justify-center h-12 w-48 overflow-hidden">
+      <div className="bg-white rounded-xl flex items-center justify-center h-14 w-56 overflow-hidden relative">
         <img 
           src="https://i.postimg.cc/9FQRFGYV/enhanced-logo.png" 
           alt="Vijay Global Logo" 
-          className="h-[180px] w-[180px] max-w-none object-contain" 
+          className="absolute h-[190px] w-[190px] max-w-none object-contain" 
           referrerPolicy="no-referrer" 
         />
       </div>
@@ -38,11 +38,11 @@ const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "
   }
 
   return (
-    <div className="flex items-center justify-center h-14 w-56 relative">
+    <div className="flex items-center justify-center h-16 w-64 relative overflow-hidden">
       <img 
         src="https://i.postimg.cc/9FQRFGYV/enhanced-logo.png" 
         alt="Vijay Global Logo" 
-        className="absolute h-[240px] w-[240px] max-w-none object-contain mix-blend-multiply pointer-events-none" 
+        className="absolute h-[190px] w-[190px] max-w-none object-contain mix-blend-multiply pointer-events-none" 
         referrerPolicy="no-referrer" 
       />
     </div>
@@ -418,10 +418,11 @@ function Home() {
     };
 
     try {
-      const response = await fetch('/api/inquiry', {
+      const response = await fetch('https://formsubmit.co/ajax/mmehta@vijayglobal.ca', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify(data)
       });
