@@ -21,48 +21,8 @@ function ScrollToTop() {
   return null;
 }
 
-const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "#1e293b" }) => (
-  <svg viewBox="0 0 450 120" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="logo-shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.2"/>
-      </filter>
-      <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#ef4444" />
-        <stop offset="100%" stopColor="#7f1d1d" />
-      </linearGradient>
-    </defs>
-    <g filter="url(#logo-shadow)">
-      {/* Globe Outline */}
-      <circle cx="60" cy="60" r="46" stroke={strokeColor} strokeWidth="2.5"/>
-      
-      {/* Abstract Continents */}
-      <path d="M 40 15 Q 50 20 45 30 T 35 45 Q 45 55 40 70 T 30 85" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-      <path d="M 75 16 Q 65 25 70 40 T 85 55 Q 90 70 80 85 T 70 104" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-      <path d="M 45 18 L 50 22 L 45 28" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-      <path d="M 82 42 L 75 48 L 78 55" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-
-      {/* Orbit Ring */}
-      <ellipse cx="60" cy="60" rx="62" ry="16" transform="rotate(-35 60 60)" stroke={strokeColor} strokeWidth="2.5"/>
-      
-      {/* Nodes */}
-      <circle cx="18" cy="30" r="4" stroke={strokeColor} strokeWidth="2.5" fill={textFill === '#ffffff' ? '#020617' : '#ffffff'}/>
-      <circle cx="102" cy="90" r="4" stroke={strokeColor} strokeWidth="2.5" fill={textFill === '#ffffff' ? '#020617' : '#ffffff'}/>
-      <circle cx="15" cy="75" r="4" stroke={strokeColor} strokeWidth="2.5" fill={textFill === '#ffffff' ? '#020617' : '#ffffff'}/>
-      <circle cx="95" cy="25" r="4" stroke={strokeColor} strokeWidth="2.5" fill={textFill === '#ffffff' ? '#020617' : '#ffffff'}/>
-
-      {/* Bottom Lines */}
-      <line x1="42" y1="98" x2="78" y2="98" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="50" y1="104" x2="58" y2="104" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round"/>
-      <line x1="64" y1="104" x2="74" y2="104" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round"/>
-
-      {/* Maple Leaf */}
-      <path d="M38 86 v -8 l -7 -3 l 3 -6 l -8 -4 l 9 -2 l 3 -11 l 3 11 l 9 2 l -8 4 l 3 6 l -7 3 v 8 z" fill="url(#leaf-grad)"/>
-
-      {/* Text */}
-      <text x="130" y="76" fontFamily="Arial, Helvetica, sans-serif" fontSize="48" fontWeight="400" fill={textFill} letterSpacing="-0.5">VIJAY GLOBAL</text>
-    </g>
-  </svg>
+const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "#1e293b" }: any) => (
+  <img src="https://i.postimg.cc/9FQRFGYV/enhanced-logo.png" alt="Vijay Global Logo" className={className} referrerPolicy="no-referrer" />
 );
 
 function Navbar() {
@@ -434,7 +394,7 @@ function Home() {
     };
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/inquiry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -446,9 +406,11 @@ function Home() {
         setFormStatus('success');
         (e.target as HTMLFormElement).reset();
       } else {
+        console.error("Server returned an error:", response.status, response.statusText);
         setFormStatus('error');
       }
     } catch (error) {
+      console.error("Network or fetch error:", error);
       setFormStatus('error');
     }
   };

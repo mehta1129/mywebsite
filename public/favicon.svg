@@ -1,0 +1,22 @@
+<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stopColor="#ef4444" />
+      <stop offset="100%" stopColor="#7f1d1d" />
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="46" stroke="#1e293b" strokeWidth="2.5"/>
+  <path d="M 40 15 Q 50 20 45 30 T 35 45 Q 45 55 40 70 T 30 85" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+  <path d="M 75 16 Q 65 25 70 40 T 85 55 Q 90 70 80 85 T 70 104" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+  <path d="M 45 18 L 50 22 L 45 28" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+  <path d="M 82 42 L 75 48 L 78 55" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+  <ellipse cx="60" cy="60" rx="62" ry="16" transform="rotate(-35 60 60)" stroke="#1e293b" strokeWidth="2.5"/>
+  <circle cx="18" cy="30" r="4" stroke="#1e293b" strokeWidth="2.5" fill="#ffffff"/>
+  <circle cx="102" cy="90" r="4" stroke="#1e293b" strokeWidth="2.5" fill="#ffffff"/>
+  <circle cx="15" cy="75" r="4" stroke="#1e293b" strokeWidth="2.5" fill="#ffffff"/>
+  <circle cx="95" cy="25" r="4" stroke="#1e293b" strokeWidth="2.5" fill="#ffffff"/>
+  <line x1="42" y1="98" x2="78" y2="98" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round"/>
+  <line x1="50" y1="104" x2="58" y2="104" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round"/>
+  <line x1="64" y1="104" x2="74" y2="104" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round"/>
+  <path d="M38 86 v -8 l -7 -3 l 3 -6 l -8 -4 l 9 -2 l 3 -11 l 3 11 l 9 2 l -8 4 l 3 6 l -7 3 v 8 z" fill="url(#leaf-grad)"/>
+</svg>

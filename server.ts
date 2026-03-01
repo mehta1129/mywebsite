@@ -10,7 +10,7 @@ async function startServer() {
   app.use(express.json());
 
   // API routes FIRST
-  app.post("/api/contact", async (req, res) => {
+  app.post("/api/inquiry", async (req, res) => {
     try {
       const { name, email, interest, message } = req.body;
 
