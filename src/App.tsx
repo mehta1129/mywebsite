@@ -21,9 +21,33 @@ function ScrollToTop() {
   return null;
 }
 
-const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "#1e293b" }: any) => (
-  <img src="https://i.postimg.cc/9FQRFGYV/enhanced-logo.png" alt="Vijay Global Logo" className={className} referrerPolicy="no-referrer" />
-);
+const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "#1e293b" }: any) => {
+  const isFooter = className?.includes('h-10');
+  
+  if (isFooter) {
+    return (
+      <div className="bg-white rounded-xl flex items-center justify-center h-12 w-48 overflow-hidden">
+        <img 
+          src="https://i.postimg.cc/9FQRFGYV/enhanced-logo.png" 
+          alt="Vijay Global Logo" 
+          className="h-[180px] w-[180px] max-w-none object-contain" 
+          referrerPolicy="no-referrer" 
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center justify-center h-14 w-56 relative">
+      <img 
+        src="https://i.postimg.cc/9FQRFGYV/enhanced-logo.png" 
+        alt="Vijay Global Logo" 
+        className="absolute h-[240px] w-[240px] max-w-none object-contain mix-blend-multiply pointer-events-none" 
+        referrerPolicy="no-referrer" 
+      />
+    </div>
+  );
+};
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
