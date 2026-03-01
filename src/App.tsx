@@ -1,14 +1,23 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Globe, Package, Plane, Ship, ShieldCheck, ArrowRight, Phone, Mail, MapPin, Leaf, Grid, TreePine, FileText, BarChart, ChevronRight, Filter, Search, Download, Wheat } from 'lucide-react';
+import { Globe, Package, Plane, Ship, ShieldCheck, ArrowRight, Phone, Mail, MapPin, Leaf, Grid, TreePine, FileText, BarChart, ChevronRight, Filter, Search, Download, Wheat, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 // Scroll to top on route change
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
   return null;
 }
 
@@ -57,6 +66,8 @@ const Logo = ({ className = "h-14 w-auto", textFill = "#1e293b", strokeColor = "
 );
 
 function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,8 +84,30 @@ function Navbar() {
               Get in Touch
             </Link>
           </div>
+          <div className="md:hidden flex items-center">
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-slate-700 hover:text-red-600 focus:outline-none"
+            >
+              {isMenuOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
+            </button>
+          </div>
         </div>
       </div>
+      
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-slate-100 shadow-lg absolute w-full">
+          <div className="px-4 pt-2 pb-6 space-y-2 flex flex-col">
+            <Link to="/#about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 text-slate-700 hover:text-red-600 hover:bg-slate-50 rounded-md font-medium">About</Link>
+            <Link to="/#products" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 text-slate-700 hover:text-red-600 hover:bg-slate-50 rounded-md font-medium">Products</Link>
+            <Link to="/#services" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 text-slate-700 hover:text-red-600 hover:bg-slate-50 rounded-md font-medium">Services</Link>
+            <Link to="/#contact" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 text-slate-700 hover:text-red-600 hover:bg-slate-50 rounded-md font-medium">Contact</Link>
+            <Link to="/#contact" onClick={() => setIsMenuOpen(false)} className="block px-3 py-3 mt-4 text-center bg-red-600 text-white rounded-lg font-medium hover:bg-red-700">
+              Get in Touch
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
@@ -380,24 +413,45 @@ function AgriCatalog() {
 
 function Home() {
   const [currentHeroImg, setCurrentHeroImg] = useState(0);
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const heroImages = [
     "https://images.unsplash.com/photo-1586528116311-ad8ed7c66364?q=80&w=2070&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=2070&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop"
   ];
 
-  // Handle smooth scrolling for anchor links
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const element = document.querySelector(hash);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus('submitting');
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: `${formData.get('firstName')} ${formData.get('lastName')}`,
+      email: formData.get('email'),
+      interest: formData.get('interest'),
+      message: formData.get('message'),
+      _subject: `New Inquiry from ${formData.get('firstName')} - Vijay Global`
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        setFormStatus('success');
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setFormStatus('error');
       }
+    } catch (error) {
+      setFormStatus('error');
     }
-  }, []);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -707,37 +761,43 @@ function Home() {
 
             <div className="bg-white p-8 md:p-10 rounded-2xl shadow-2xl text-slate-900 border border-slate-100">
               <h3 className="text-2xl font-bold mb-8">Send us a Message</h3>
-              <form className="space-y-5">
+              <form className="space-y-5" onSubmit={handleFormSubmit}>
                 <div className="grid grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">First Name</label>
-                    <input type="text" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white" placeholder="John" />
+                    <input name="firstName" required type="text" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white" placeholder="John" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Last Name</label>
-                    <input type="text" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white" placeholder="Doe" />
+                    <input name="lastName" required type="text" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white" placeholder="Doe" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
-                  <input type="email" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white" placeholder="john@company.com" />
+                  <input name="email" required type="email" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white" placeholder="john@company.com" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Interest</label>
-                  <select className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white cursor-pointer">
-                    <option>Porcelain Tiles</option>
-                    <option>Agri Products</option>
-                    <option>Lumber Wood Products</option>
-                    <option>General Inquiry</option>
+                  <select name="interest" className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white cursor-pointer">
+                    <option value="Porcelain Tiles">Porcelain Tiles</option>
+                    <option value="Agri Products">Agri Products</option>
+                    <option value="Lumber Wood Products">Lumber Wood Products</option>
+                    <option value="General Inquiry">General Inquiry</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Message</label>
-                  <textarea rows={4} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white resize-none" placeholder="How can we help you?"></textarea>
+                  <textarea name="message" required rows={4} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all bg-slate-50 hover:bg-white resize-none" placeholder="How can we help you?"></textarea>
                 </div>
-                <button type="button" className="w-full bg-red-600 text-white px-6 py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 mt-2">
-                  Submit Inquiry
+                <button type="submit" disabled={formStatus === 'submitting'} className="w-full bg-red-600 text-white px-6 py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20 mt-2 disabled:opacity-70">
+                  {formStatus === 'submitting' ? 'Sending...' : 'Submit Inquiry'}
                 </button>
+                {formStatus === 'success' && (
+                  <p className="text-green-600 text-center mt-4 font-medium">Message sent successfully! We will get back to you soon.</p>
+                )}
+                {formStatus === 'error' && (
+                  <p className="text-red-600 text-center mt-4 font-medium">There was an error sending your message. Please try again.</p>
+                )}
               </form>
             </div>
           </div>
